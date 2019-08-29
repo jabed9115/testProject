@@ -1,0 +1,77 @@
+public class CaseTriggerHandler {
+    
+    //Check a list of case records. If the an account or contact is missing a new account and contact is created
+    public static void caseCheck(List <Case> caseList)
+    {
+        List<Case> updateCaseList= New List <Case>();
+        
+        CaseList = [SELECT id,AccountId,ContactId, CaseNumber FROM Case WHERE AccountId = null OR ContactId = null];
+            
+        For(Case caseLoop : caseList)
+        {
+            Contact newContact= New Contact();
+            Account newAccount= New Account();            
+            Case newCase = caseLoop;
+            
+            
+            if(caseLoop.AccountId == Null && caseLoop.ContactId == null)
+            {
+               
+                newCase = updateCaseWithContact(newCase);
+                newCase = generateAccountData(newCase);
+                updateCaseList.add(newCase);
+                
+            }
+            else if(caseLoop.ContactId == null)
+            {
+               
+                newCase = updateCaseWithContact(newCase);
+                updateCaseList.add(newCase);
+            }
+            else
+            {
+                
+                newCase = generateAccountData(newCase);
+                updateCaseList.add(newCase);
+                
+            }
+        }
+        
+        database.insert(updateCaseList);
+    }
+    
+    private static Contact createContact ()
+    {
+            Contact c = New Contact();
+            //Integer randomNumber = Integer.valueOf(Math.random());
+            Integer randomNumber = Integer.valueOf(Math.random() * 10);
+        
+            c.LastName = 'Name'+ randomNumber;
+            //newContactList.add(c);
+      
+        
+        return c;
+    }
+    
+    private static case updateCaseWithContact(Case addCase)
+    {
+        Contact newContact = New Contact();
+         newContact = createContact();
+         //addCase = caseLoop;
+         addCase.ContactId = newContact.Id;
+         //updateCaseList.add(newCase);  
+         return addCase;      
+    }
+    
+    private static Case generateAccountData(Case addCase)
+    {
+        Account accountData = new Account();
+        Integer randomNumber = Integer.valueOf(Math.random() * 10);
+        
+        accountData.Name = 'Test' + randomNumber;
+        addCase.AccountId = accountData.Id;
+
+
+        return addCase;
+    }
+}
